@@ -1,0 +1,45 @@
+[project]
+name = "flight-punctuality"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Johnny Hyytiäinen", email = "Johnny.Hyytiainen@gmail.com" }
+]
+# En applikation kör på exakt en Python-version
+requires-python = "==3.12.*"
+dependencies = []
+
+
+[build-system]
+requires = ["uv_build>=0.12.6,<0.13.0"]
+build-backend = "uv_build"
+
+# Lokalt installerar uv sync alla grupper
+[tool.uv]
+default-groups = "all"
+
+[dependency-groups]
+dashboard = [
+    "snowflake-connector-python[pandas]>=4.8.0",
+    "streamlit>=1.65.0",
+]
+dev = [
+    "duckdb>=1.5.6",
+    "ipykernel>=7.4.0",
+    "pytest>=9.1.1",
+    "ruff>=0.16.10",
+]
+ingestion = [
+    "dlt[snowflake]>=1.31.0",
+]
+orchestration = [
+    "dagster>=1.13.25",
+    "dagster-dbt>=0.29.25",
+    "dagster-dlt>=0.29.25",
+    "dagster-webserver>=1.13.25",
+]
+transform = [
+    "dbt-core>=1.12.5",
+    "dbt-snowflake>=1.12.1",
+]
