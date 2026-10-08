@@ -218,3 +218,71 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# =============================================================
+# Labbrepot: dlt + dbt + Snowflake + Dagster + Streamlit
+# Princip: ignorera hemligheter och mappar, inte filändelser rakt av
+# =============================================================
+
+# --- 1. Hemligheter (läcker de är nyckeln bränd) ---
+.env
+.env.*
+!.env.example
+secrets.toml
+*.p8
+*.pem
+*.key
+rsa_key*
+# OBS: dbt_project/profiles.yml checkas IN. Den innehåller bara env_var()
+
+# --- 2. Python och uv ---
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+*.log
+
+# --- 3. dlt ---
+*.duckdb
+*.duckdb.wal
+
+# --- 4. dbt ---
+target/
+dbt_packages/
+logs/
+
+# --- 5. Dagster ---
+.tmp_dagster_home_*/
+
+# --- 6. Data (ALDRIG i git) ---
+data/*
+!data/README.md
+!data/.gitkeep
+*.parquet
+*.zip
+*.gz
+*.tar
+*.sqlite
+*.sqlite3
+*.db
+
+# --- 7. scratch ---
+scratch/*
+!scratch/.gitkeep
+
+# --- 8. Editor och OS ---
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
