@@ -70,7 +70,14 @@ Findings that decide the dimensional model, one question at a time. Every number
 **For the model this indicates that:** we should count rows, not flight numbers. The `codeshare` table is never joined into the fact, since one row per partner number would multiply the flight and its delay.
 
 ## 6. Domestic flights: in both tables
-*Open*
+- A flight between two Swedavia airports is a departure at one and an arrival at the other, so it is in both tables with the same key.
+- 503 flights are in both tables: about **29%** of each direction (1 758 departures, 1 769 arrivals). Most are **SAS**.
+- The two rows are two different events. Of 412 flights completed at both ends: 24 delayed at departure, 22 at arrival. 6 late departures caught up in the air, and 4 flights were late only on arrival.
+- 7 rows have **no twin**: flights that departed 4 Oct (outside the window), and two flights that returned to Arlanda (`ARN` -> `ARN`).
+
+**For the model this means:** keep both rows, since they are two movements with two delays. The measures count movements (`arrivals` and `departures`) *not* flights. Counting flights per airline across all airports would count the 503 domestic flights twice.
+
+- **Note:** The `API` spec also has `DIV`(Diverted) and `RER`(Rerouted) according to docs. But **none** of these codes have been found in the data spanning over these four days, but the status rule only counts `LAN` / `ACT`.
 
 ## 7. Date: which day does the fact carry?
 *Open*
@@ -82,3 +89,4 @@ Findings that decide the dimensional model, one question at a time. Every number
 
 - About 34 `DEL` rows per direction have a live row with another flight number, same route and same time. Possibly codeshare (question 5).
 - 5 departures on 5 Oct still `SCH` two days later: warn, or filter silently?
+- The `API` spec also has `DIV`(Diverted) and `RER`(Rerouted) according to docs. But **none** of these codes have been found in the data spanning over these four days, but the status rule only counts `LAN` / `ACT`.
