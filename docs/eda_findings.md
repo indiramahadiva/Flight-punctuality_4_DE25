@@ -61,7 +61,13 @@ Findings that decide the dimensional model, one question at a time. Every number
 **For the model this indicates that:** the fact stores `delay_seconds` with sign (negative = early), computed in seconds, not with `date_diff('minute')`. Delayed = `delay_seconds > 900`. An average delay is pulled down by early arrivals; the share delayed is not.
 
 ## 5. Codeshare: one flight with several flight numbers
-*Open*
+- Codeshare = one physical flight sold under several flight numbers. Example: `LH814` FRA -> GOT, operated by Lufthansa, also sold under 8 partner numbers (AC, ET, EY, NH, OS, SN, SQ, UA).
+- Swedavia sends the partner numbers as a list inside the flight. dlt puts the list in a child table, `<table>__code_share_data`, linked by `_dlt_parent_id` -> `_dlt_id`.
+- About **40%** of flights have `codeshare`: 723 of 1 769 arrivals, 699 of 1 758 departures. *Max 8* partner numbers per arrival, 9 per departure.
+- No partner number appears as its own row on the same flight leg: 0 in both directions. `One row = one physical flight`.
+- The 34 `DEL` rows per direction with a live twin under another number are not `codeshare`. Swedavia corrected the flight number or the operator by deleting and recreating the row (`FRO670` -> `FT670`, `LH800` -> `VL800`). The `DEL` filter removes them.
+
+**For the model this indicates that:** we should count rows, not flight numbers. The `codeshare` table is never joined into the fact, since one row per partner number would multiply the flight and its delay.
 
 ## 6. Domestic flights: in both tables
 *Open*
