@@ -234,6 +234,7 @@ secrets.toml
 *.pem
 *.key
 rsa_key*
+setup_user*
 # OBS: dbt_project/profiles.yml checkas IN. Den innehåller bara env_var()
 
 # --- 2. Python och uv ---
