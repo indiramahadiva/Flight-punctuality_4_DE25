@@ -40,7 +40,25 @@ Findings that decide the dimensional model, one question at a time. Every number
 **For the model:** delay is measured on `LAN` / `ACT` only. `CAN` is its own measure. `SCH` / `SEQ` are not counted. Delayed = more than 15 minutes (`delay_seconds > 900`), agreed by the group 8 Oct.
 
 ## 4. Delay: which time fields, and the distribution around 900 s
-*Open*
+- Both directions have `scheduled_utc`, `estimated_utc` and `actual_utc`. Delay = `actual_utc` - `scheduled_utc` in seconds, on `LAN` / `ACT` only.
+- Scheduled times are always in *whole minutes*. Actual times often have seconds.
+
+| | Arrivals | Departures |
+|---|---|---|
+| Completed flights | 1 486 | 1 497 |
+| Early (< 0 s) | 1 073 | 765 |
+| Median | -480 s | -16 s |
+| 90th percentile | 840 s | 1 203 s |
+| Max | 12 390 s | 11 605 s |
+| **Delayed (> 900 s)** | **141 (9.5 %)** | **194 (13.0 %)** |
+| `>= 900 s` | 146 | 194 |
+| `date_diff('minute') > 15` | 139 | 189 |
+
+- Negative = early. Most arrivals land early because airlines pad the scheduled arrival time. The earliest are long-haul flights (JFK, EWR, HND, PEK).
+- 5 arrivals were exactly 900 s late. "More than 15 minutes" leaves them out.
+- `date_diff('minute')` counts minute boundaries, not elapsed time: 15 min 40 s becomes 15. It misses 2 arrivals and 5 departures.
+
+**For the model this indicates that:** the fact stores `delay_seconds` with sign (negative = early), computed in seconds, not with `date_diff('minute')`. Delayed = `delay_seconds > 900`. An average delay is pulled down by early arrivals; the share delayed is not.
 
 ## 5. Codeshare: one flight with several flight numbers
 *Open*
