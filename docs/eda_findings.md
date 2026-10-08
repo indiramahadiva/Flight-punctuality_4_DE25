@@ -80,7 +80,18 @@ Findings that decide the dimensional model, one question at a time. Every number
 - **Note:** The `API` spec also has `DIV`(Diverted) and `RER`(Rerouted) according to docs. But **none** of these codes have been found in the data spanning over these four days, but the status rule only counts `LAN` / `ACT`.
 
 ## 7. Date: which day does the fact carry?
-*Open*
+- Four candidate dates per flight. Compared with the Swedish date of the scheduled time at the Swedavia airport, this many flights would land on another day (of 1 769 arrivals, 1 758 departures):
+
+| If the fact used... | Arrivals | Departures |
+|---|---|---|
+| UTC date of the scheduled time | 49 | 3 |
+| `departure_date_utc` (the key date) | 75 | 3 |
+| Swedish date of the actual time | 16 | 2 |
+
+- Arrivals move most: late evening flights landing after midnight, and long-haul flights that left the day before.
+- The actual time moves late flights to the next day and early ones to the day before. Cancelled flights have no actual time, so they would have no date at all.
+
+**For the model (proposal):** the fact carries the Swedish date of the scheduled time at the Swedavia airport, converted with the time zone name (`Europe/Stockholm`), never a fixed +2 hours, since Sweden moves to UTC+1 on 25 October. `departure_date_utc` stays in the key, where it identifies the flight.
 
 ## 8. Keys against Wikipedia: IATA or ICAO?
 *Open*
