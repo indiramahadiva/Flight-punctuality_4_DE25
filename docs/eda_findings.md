@@ -1,7 +1,5 @@
 # EDA findings: Swedavia FlightInfo
 
-# EDA findings: Swedavia FlightInfo
-
 Findings that decide the dimensional model, one question at a time. Every number comes from a query in `notebooks/eda_swedavia.ipynb`.
 
 **Source:** `data/sandbox_swedavia_merge.duckdb`, schema `swedavia_raw`, loaded by dlt with merge (not in git, `data/` is ignored).
@@ -97,7 +95,4 @@ Findings that decide the dimensional model, one question at a time. Every number
 *Open*
 
 ## Not investigated yet
-
-- About 34 `DEL` rows per direction have a live row with another flight number, same route and same time. Possibly codeshare (question 5).
 - 5 departures on 5 Oct still `SCH` two days later: warn, or filter silently?
-- The `API` spec also has `DIV`(Diverted) and `RER`(Rerouted) according to docs. But **none** of these codes have been found in the data spanning over these four days, but the status rule only counts `LAN` / `ACT`.
