@@ -3,7 +3,8 @@
 Findings that decide the dimensional model, one question at a time. Every number comes from a query in `notebooks/eda_swedavia.ipynb`.
 
 **Source:** `data/sandbox_swedavia_merge.duckdb`, schema `swedavia_raw`, loaded by dlt with merge (not in git, `data/` is ignored).
-**Scope:** 10 Swedavia airports, both directions, Swedish days 5–8 October 2026. Last load 8 Oct 12:01 UTC.
+
+**Scope:** 10 Swedavia airports, both directions. Questions 1-7: Swedish days 5-8 October 2026, load of 8 Oct 12:01 UTC. Question 8: days 5-9 October, load of 9 Oct 11:59 UTC. The notebook has been re-run on the later load, so its counts are higher than in 1-7.
 
 ## 1. Shape: what is in the data?
 
@@ -92,7 +93,24 @@ Findings that decide the dimensional model, one question at a time. Every number
 **For the model (proposal):** the fact carries the Swedish date of the scheduled time at the Swedavia airport, converted with the time zone name (`Europe/Stockholm`), never a fixed +2 hours, since Sweden moves to UTC+1 on 25 October. `departure_date_utc` stays in the key, where it identifies the flight.
 
 ## 8. Keys against Wikipedia: IATA or ICAO?
-*Open*
+- Indiras lists in `data/` (not in git): `wikipedia_airlines.csv` has IATA and ICAO, `wikipedia_airports.csv` has IATA only.
+- Airlines, 53 without `DEL`:
+
+| Join key | Matched | Several Wikipedia rows | No match |
+|---|---|---|---|
+| ICAO | 49 | 3 | 4 |
+| IATA | 48 | 17 | 5 |
+
+- IATA codes are reused when airlines close, so one code hits several rows. The 3 ICAO doubles (Swiss/Swissair, Lufthansa/Deutsche Luft Hansa, Air Baltic twice) are resolved by also matching IATA.
+
+- Swedavia's own IATA field is unreliable: 5 airlines carry their ICAO code there (`BLX`, `FRO`, `JON`, `JTD`, `POL`), and FROST Air has `FT` in both fields.
+
+- A match is not always the right one it seems: ICAO `JON` is Jonair at Swedavia but Johnsons Air (**Ghana**) in Wikipedia.
+
+- Airports, 150 without `DEL`: IATA is the only key, since the list has no ICAO. 130 matches and 20 do not match, among them `KRN` and `RNB`, two of the ten Swedavia airports. The list covers *international* airports, so small Swedish airports are missing in this data.
+
+**For the model this means that:** `dim_airline` joins Wikipedia on ICAO, `dim_airport` on IATA. Both dimensions are built from Swedavias codes with Wikipedia added by a `LEFT JOIN` so no airline or airport is lost. The missing attributes then become `Unknown`. Names come from Swedavia, *only* country and *city* from Wikipedia. The **fact** carries hashed keys only, so the different join keys never reach it.
 
 ## Not investigated yet
 - 5 departures on 5 Oct still `SCH` two days later: warn, or filter silently?
+- `FLS` ("Delayed until ....."): *new* status on 9 Oct, 1 departure. Not in the status table above.
