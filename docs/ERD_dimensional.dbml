@@ -1,0 +1,39 @@
+// Faktan: en rad = en rörelse (ankomst eller avgång) på en Swedavia-flygplats
+Table fct_flight_movements {
+  movement_id varchar [pk, note: 'hash of direction, flight_id, departure_date_utc, from_iata, to_iata']
+  date_key date [note: 'Europe/Stockholm date of scheduled time']
+  airline_id varchar
+  swedavia_airport_id varchar
+  other_airport_id varchar
+  direction varchar [note: 'ARR or DEP']
+  flight_id varchar   // flygnumret, ingen egen dimension
+  status varchar      // LAN, ACT, CAN, SCH, DEL är borta redan i staging
+  scheduled_utc timestamp
+  actual_utc timestamp  // saknas för inställda och ej genomförda
+  delay_seconds integer [note: 'actual minus scheduled, signed, negative = early']
+}
+
+Table dim_date {
+  date_key date [pk]
+  weekday varchar
+}
+
+Table dim_airline {
+  airline_id varchar [pk]
+  airline_icao varchar
+  airline_iata varchar
+  airline_name varchar
+}
+
+Table dim_airport {
+  airport_id varchar [pk]
+  airport_iata varchar
+  airport_icao varchar
+  airport_name varchar
+}
+
+// Många rörelser per dag, bolag och flygplats
+Ref: fct_flight_movements.date_key > dim_date.date_key
+Ref: fct_flight_movements.airline_id > dim_airline.airline_id
+Ref: fct_flight_movements.swedavia_airport_id > dim_airport.airport_id
+Ref: fct_flight_movements.other_airport_id > dim_airport.airport_id
