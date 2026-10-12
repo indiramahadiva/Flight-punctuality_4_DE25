@@ -1,10 +1,10 @@
 # assets_dlt.py, script for our dagster DLT assets.
 # dlt sources as our Dagster assets, one asset per dlt resource = one asset per raw table.
-# One raw table becomes -> a dlt resource that becomes -> A Dagster asset.
+# One dlt resource -> one raw table in Snowflake -> one Dagster asset.
 import dagster as dg
 from dagster_dlt import DagsterDltResource, dlt_assets
 
-# Our raw tables
+# Our dlt pipelines and sources
 from flight_punctuality.ingestion.pipelines_swedavia import swedavia_pipeline
 from flight_punctuality.ingestion.pipelines_wikipedia import wikipedia_pipeline
 from flight_punctuality.ingestion.swedavia import swedavia_source
@@ -27,6 +27,6 @@ def swedavia_assets(context: dg.AssetExecutionContext, dlt: DagsterDltResource):
     dlt_source=wikipedia_source(),
     dlt_pipeline=wikipedia_pipeline(),
 )
-# No dates - Will work with full reload of the reference data (Think: write_disposition="replace")
 def wikipedia_assets(context: dg.AssetExecutionContext, dlt: DagsterDltResource):
+    # No dates - Will work with full reload of the reference data (Think: write_disposition="replace")
     yield from dlt.run(context=context)
