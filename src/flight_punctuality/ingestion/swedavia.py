@@ -1,5 +1,5 @@
 """Extract Swedavia flight data using dlt.
-uv run --env-file .env python -m flight_punctuality.ingestion.pipelines
+uv run --env-file .env python -m flight_punctuality.ingestion.pipelines_swedavia
 """
 
 import os
@@ -25,7 +25,7 @@ def fetch_flights(
 
     Args:
         airport: Airport code, e.g. "ARN" for Arlanda.
-        direction: Either "arrivals" or "departures".
+        direction: Either "arrival" or "departure".
         date: Date to fetch flight data for (YYYY-MM-DD).
 
     Returns:
