@@ -28,7 +28,7 @@ def swedavia_pipeline() -> dlt.Pipeline:
     )
 
 
-def run_pipeline():
+def run_swedavia_pipeline():
     """
     Extract arrivals and departures for all configured airports and dates.
 
@@ -49,5 +49,5 @@ def run_pipeline():
 # Only execute automatically when this file is run directly.
 # Importing run_pipeline from Dagster will not start an ingestion.
 if __name__ == "__main__":
-    load_info = run_pipeline()
+    load_info = run_swedavia_pipeline()
     print(load_info)

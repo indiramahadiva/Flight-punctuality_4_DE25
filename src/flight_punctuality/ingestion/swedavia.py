@@ -2,13 +2,17 @@
 uv run --env-file .env python -m flight_punctuality.ingestion.pipelines
 """
 
-import json
 import os
-import urllib.request
 
 import dlt
 
+# no longer need json or urllib.request, because the HTTP response object can deserialize JSON directly.
+from dlt.sources.helpers import requests
+
 BASE_URL = "https://api.swedavia.se/flightinfo/v2"
+
+# Keep internal direction singular to preserve existing movement keys.
+API_DIRECTIONS = {"arrival": "arrivals", "departure": "departures"}
 
 
 def fetch_flights(
@@ -29,24 +33,21 @@ def fetch_flights(
     """
 
     # Only these two API endpoints are supported.
-    if direction not in ("arrivals", "departures"):
+    if direction not in API_DIRECTIONS:
         raise ValueError(f"Invalid direction: {direction}")
 
-    url = f"{BASE_URL}/{airport}/{direction}/{date}"
+    endpoint = API_DIRECTIONS[direction]
+    url = f"{BASE_URL}/{airport}/{endpoint}/{date}"
 
-    # Create an HTTP request with the API key for authentication.
-    request = urllib.request.Request(
-        url,
-        headers={
-            # Read the API key from environment variables.
-            "Ocp-Apim-Subscription-Key": os.environ["SWEDAVIA_API_KEY"],
-            "Accept": "application/json",
-        },
-    )
+    headers = {
+        "Ocp-Apim-Subscription-Key": os.environ["SWEDAVIA_API_KEY"],
+        "Accept": "application/json",
+    }
 
-    # Send the request (30-second timeout) and parse JSON into Python.
-    with urllib.request.urlopen(request, timeout=30) as response:
-        data = json.load(response)
+    # dlt retries 429, 5xx, timeouts, and connection errors automatically.
+    response = requests.get(url, headers=headers, timeout=30)
+    response.raise_for_status()
+    data = response.json()
 
     # Validate the API response before processing the flights.
     # TypeError: The API returned an unexpected data type.
@@ -80,6 +81,10 @@ def create_movement_key(
     This key allows dlt to match existing records during a merge.
     """
 
+    # Reject typos instead of treating every non-arrival as a departure.
+    if direction not in API_DIRECTIONS:
+        raise ValueError(f"Invalid direction: {direction}")
+
     # Arrivals and departures have different time fields in the API.
     time_field = "arrivalTime" if direction == "arrival" else "departureTime"
 
@@ -112,7 +117,7 @@ def arrivals(airports: list[str], dates: list[str]):
     # Loop through every airport and every requested date.
     for airport in airports:
         for date in dates:
-            for flight in fetch_flights(airport, "arrivals", date):
+            for flight in fetch_flights(airport, "arrival", date):
                 # yield sends one flight record at a time to dlt.
                 yield {
                     **flight,  # Preserve all original API fields.
@@ -139,7 +144,7 @@ def departures(airports: list[str], dates: list[str]):
     # Loop through every airport and every requested date.
     for airport in airports:
         for date in dates:
-            for flight in fetch_flights(airport, "departures", date):
+            for flight in fetch_flights(airport, "departure", date):
                 yield {
                     **flight,  # Preserve all original API fields.
                     "swedavia_airport": airport,
