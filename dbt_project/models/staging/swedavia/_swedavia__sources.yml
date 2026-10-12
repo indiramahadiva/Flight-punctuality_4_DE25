@@ -4,4 +4,12 @@ sources:
     schema: swedavia_raw # DLTs dataset_name
     tables:
       - name: arrivals # andra argumentet i source()
+        config:
+          meta:
+            dagster:
+              asset_key: ["dlt_swedavia_arrivals"] # Same name as in the dlt-asset in Dagster
       - name: departures
+        config:
+          meta:
+            dagster:
+              asset_key: ["dlt_swedavia_departures"] # Same name as in the dlt asset in Dagster
