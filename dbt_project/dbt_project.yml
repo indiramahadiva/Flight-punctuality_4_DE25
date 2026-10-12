@@ -1,0 +1,19 @@
+# dbt_project/dbt_project.yml
+name: flight_punctuality          # projektets namn, används som nyckel under models:
+version: "1.0.0"
+profile: flight_punctuality       # måste matcha blocknamnet i profiles.yml exakt
+
+# models/, macros/, seeds/ och tests/ är dbt:s standardmappar, så inga paths behövs
+
+clean-targets:                    # det som dbt clean får radera
+  - target
+  - dbt_packages
+
+models:
+  flight_punctuality:             # samma som name: ovan, felstavat ger bara en gul varning
+    staging:
+      +schema: staging            # dev: dbt_johnny_staging, prod: staging (med makrot i steg 2)
+      +materialized: view
+    marts:
+      +schema: marts              # dev: dbt_johnny_marts, prod: marts
+      +materialized: table
