@@ -1,0 +1,28 @@
+
+# Tests that each staging model contains a unique, non-null movement identifier.
+version: 2
+
+models:
+  - name: stg_swedavia__arrivals
+    description: >
+      Cleaned and standardized Swedavia arrival movements,
+      excluding deleted flight records.
+
+    columns:
+      - name: raw_movement_key
+        description: Unique movement identifier from ingestion.
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_swedavia__departures
+    description: >
+      Cleaned and standardized Swedavia departure movements,
+      excluding deleted flight records.
+
+    columns:
+      - name: raw_movement_key
+        description: Unique movement identifier from ingestion.
+        data_tests:
+          - unique
+          - not_null
