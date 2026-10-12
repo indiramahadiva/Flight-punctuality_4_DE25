@@ -12,8 +12,8 @@ clean-targets:                    # det som dbt clean får radera
 models:
   flight_punctuality:             # samma som name: ovan, felstavat ger bara en gul varning
     staging:
-      +schema: staging            # dev: dbt_johnny_staging, prod: staging (med makrot i steg 2)
+      +schema: staging            # dev: dbt_<NAMN>_staging, prod: staging (med makrot i steg 2)
       +materialized: view
     marts:
-      +schema: marts              # dev: dbt_johnny_marts, prod: marts
+      +schema: marts              # dev: dbt_<NAMN>_marts, prod: marts
       +materialized: table
