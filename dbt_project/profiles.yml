@@ -1,0 +1,17 @@
+# dbt_project/profiles.yml
+flight_punctuality: # samma namn som profile: i dbt_project.yml filen
+  target: "{{ env_var('DBT_TARGET', 'dev') }}"
+  outputs:
+    dev: &snowflake # &snowflake: döper blocket så att prod kan återanvända det senare
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_TRANSFORMER_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_TRANSFORMER_PASSWORD') }}"
+      role: "{{ env_var('SNOWFLAKE_TRANSFORMER_ROLE') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE') }}"
+      schema: "{{ env_var('DBT_SCHEMA') }}"   # Våra bas-schemam, dbt_johnny... dbt_indira... dbt_aira.. dbt_christoffer 
+      threads: 4
+    prod:
+      <<: *snowflake                      # allting ifrån dev
+      schema: dbt_prod   

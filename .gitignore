@@ -258,6 +258,7 @@ dist/
 target/
 dbt_packages/
 logs/
+.user.yml
 
 # --- 5. Dagster ---
 .tmp_dagster_home_*/

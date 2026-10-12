@@ -1,0 +1,7 @@
+# dbt_project/models/staging/wikipedia/_wikipedia__sources.yml
+sources:
+  - name: wikipedia
+    schema: wikipedia_raw
+    tables:
+      - name: airlines
+      - name: airports

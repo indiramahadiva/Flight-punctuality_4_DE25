@@ -1,0 +1,7 @@
+# dbt_project/models/staging/swedavia/_swedavia__sources.yml
+sources:
+  - name: swedavia # första argumentet i source()
+    schema: swedavia_raw # DLTs dataset_name
+    tables:
+      - name: arrivals # andra argumentet i source()
+      - name: departures
