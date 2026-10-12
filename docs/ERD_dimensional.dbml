@@ -29,11 +29,12 @@ Table dim_airline {
 // Byggs ifrån Swedavias KODER, Wikipedia läggs på med en LEFT JOIN
 Table dim_airport {
   airport_id varchar [pk, note: 'hash of airport_iata']
-  airport_iata varchar [not null, note: 'natural key, JOINS Wikipedia']
+  airport_iata varchar [not null, note: 'natural key, joins the seed and Wikipedia']
   airport_icao varchar [not null]
-  airport_name varchar [not null] // Från Swedavia, t.ex "Stockholm ARN"
-  city varchar [not null, note: 'Wikipedia location, Unknown if no match exists']
-  country varchar [not null, note: 'Wikipedia country, Unknown if no match exists']
+  airport_name varchar [not null, note: 'seed, else Swedavia, else Wikipedia, else Unknown']
+  city varchar [not null, note: 'seed, else Wikipedia location, else Unknown']
+  country varchar [not null, note: 'seed, else Wikipedia country, else Unknown']
+  is_swedavia boolean [not null, note: 'true for the ten airports in the seed']
 }
 
 // Flera(många) rörelser per dag, per bolag och per flygplats
