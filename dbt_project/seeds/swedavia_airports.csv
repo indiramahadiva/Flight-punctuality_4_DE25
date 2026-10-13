@@ -1,11 +1,24 @@
-iata_code,airport_name,city
-ARN,Stockholm Arlanda Airport,Stockholm
-BMA,Stockholm Bromma Airport,Stockholm
-GOT,Göteborg Landvetter Airport,Gothenburg
-MMX,Malmö Airport,Malmö
-LLA,Luleå Airport,Luleå
-UME,Umeå Airport,Umeå
-OSD,Åre Östersund Airport,Östersund
-VBY,Visby Airport,Visby
-KRN,Kiruna Airport,Kiruna
-RNB,Ronneby Airport,Ronneby
+iata_code,airport_name,city,is_swedavia
+ARN,Stockholm Arlanda Airport,Stockholm,true
+BMA,Stockholm Bromma Airport,Stockholm,true
+GOT,Göteborg Landvetter Airport,Gothenburg,true
+MMX,Malmö Airport,Malmö,true
+LLA,Luleå Airport,Luleå,true
+UME,Umeå Airport,Umeå,true
+OSD,Åre Östersund Airport,Östersund,true
+VBY,Visby Airport,Visby,true
+KRN,Kiruna Airport,Kiruna,true
+RNB,Ronneby Airport,Ronneby,true
+AGH,Ängelholm–Helsingborg Airport,Ängelholm,false
+TYF,Torsby Airport,Torsby,false
+GEV,Gällivare Lapland Airport,Gällivare,false
+PJA,Pajala Airport,Pajala,false
+EVG,Sveg Airport,Sveg,false
+HMV,Hemavan Tärnaby Airport,Hemavan,false
+VHM,Vilhelmina South Lapland Airport,Vilhelmina,false
+KRF,Höga Kusten Airport,Kramfors,false
+HAD,Halmstad Airport,Halmstad,false
+SFT,Skellefteå Airport,Skellefteå,false
+KLR,Kalmar Airport,Kalmar,false
+THN,Trollhättan–Vänersborg Airport,Trollhättan,false
+AJR,Arvidsjaur Airport,Arvidsjaur,false
