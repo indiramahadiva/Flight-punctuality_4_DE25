@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  # Fact table: one row per flight movement.
+  - name: fct_flight_movements
+    description: >
+      One row per arrival or departure movement at a
+      Swedavia airport.
+
+    columns:
+      # Primary key: must be unique and not null.
+      - name: movement_id
+        description: Unique surrogate key for a flight movement.
+        data_tests:
+          - unique
+          - not_null
+
+      # Foreign key linking to dim_date.
+      - name: date_key
+        description: Scheduled movement date in Swedish local time.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+
+      # Foreign keys: must not contain null values.
+      - name: airline_id
+        data_tests:
+          - not_null
+
+      - name: swedavia_airport_id
+        data_tests:
+          - not_null
+
+      - name: other_airport_id
+        data_tests:
+          - not_null
+
+      # Only arrivals (ARR) and departures (DEP) are allowed.
+      - name: direction
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['ARR', 'DEP']
+
+  # Date dimension: one row per unique calendar date.
+  - name: dim_date
+    description: >
+      Distinct Swedish calendar dates from scheduled
+      flight arrivals and departures.
+
+    columns:
+      # Primary key: must be unique and not null.
+      - name: date_key
+        data_tests:
+          - unique
+          - not_null
+
+      # Every date must have a weekday.
+      - name: weekday
+        data_tests:
+          - not_null
