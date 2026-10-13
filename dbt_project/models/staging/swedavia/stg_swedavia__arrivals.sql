@@ -71,6 +71,8 @@ with source as (
     -- Keep cancelled (CAN) and other flight statuses
     -- for downstream reporting and analysis.
     where location_and_status__flight_leg_status != 'DEL'
+        and airline_operator__icao != 'SWD'
+
 )
 
 
