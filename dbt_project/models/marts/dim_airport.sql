@@ -1,9 +1,9 @@
 -- dim_airport
 -- One row per airport that appears in Swedavia's flights, at either end.
 -- Swedavia decides which airports exist.
--- The seed adds name, city and country for Swedish airports
--- (domestic ones aren't on Wikipedia's international list), plus the is_swedavia flag.
+-- The seed adds name, city and country for Swedish airports, plus the is_swedavia flag.
 -- Wikipedia adds name, city and country for everything else.
+-- Key: airport_iata (natural key, the fact table joins on it).
 
 with swedavia_codes as (
     -- every airport code in the flights, both ends, both directions
@@ -18,23 +18,21 @@ with swedavia_codes as (
 )
 
 select
-    -- same hash as in the fact table, so the two find each other
-    {{ dbt_utils.generate_surrogate_key(['c.airport_iata']) }} as airport_id,
     c.airport_iata,
 
-    -- the seed wins for Swedish airports, Wikipedia fills in the rest
-    coalesce(s.airport_name, w.airport_name)                    as airport_name,
-    coalesce(s.city, w.city)                                    as city,
+    -- the seed wins for Swedish airports, Wikipedia fills in the rest,
+    -- 'Unknown' when neither has the airport
+    coalesce(s.airport_name, w.airport_name, 'Unknown')    as airport_name,
+    coalesce(s.city, w.city, 'Unknown')                    as city,
     case
-        when s.iata_code is not null then 'Sweden'              -- every seed row is Swedish
+        when s.iata_code is not null then 'Sweden'          -- every seed row is Swedish
         else coalesce(w.country, 'Unknown')
-    end                                                         as country,
+    end                                                     as country,
 
     -- true only for Swedavia's ten airports
-    coalesce(s.is_swedavia, false)                              as is_swedavia
+    coalesce(s.is_swedavia, false)                          as is_swedavia
 
 from swedavia_codes as c
-
 -- left joins: no airport disappears if the seed or Wikipedia lacks it
 left join {{ ref('swedavia_airports') }} as s
     on c.airport_iata = s.iata_code
