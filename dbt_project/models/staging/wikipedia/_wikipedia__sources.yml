@@ -3,5 +3,13 @@ sources:
   - name: wikipedia
     schema: wikipedia_raw
     tables:
-      - name: airlines
+      - name: airlines # Second argument in source()
+        config:
+          meta:
+            dagster:
+              asset_key: ["dlt_wikipedia_airlines"] # Same name as dlt-asset in Dagster
       - name: airports
+        config:
+          meta:
+            dagster:
+              asset_key: ["dlt_wikipedia_airports"] # Same name as dlt-asset in Dagster
