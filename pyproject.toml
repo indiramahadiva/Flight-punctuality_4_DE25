@@ -6,6 +6,7 @@ readme = "README.md"
 authors = [
     { name = "Johnny Hyytiäinen", email = "Johnny.Hyytiainen@gmail.com" }
 ]
+
 # En applikation kör på exakt en Python-version
 requires-python = "==3.12.*"
 dependencies = []
@@ -18,6 +19,10 @@ build-backend = "uv_build"
 # Lokalt installerar uv sync alla grupper
 [tool.uv]
 default-groups = "all"
+
+# Dagster finds its entry point here, so 'dagster dev' works without -m
+[tool.dagster]
+module_name = "flight_punctuality.definitions"
 
 [dependency-groups]
 dashboard = [
