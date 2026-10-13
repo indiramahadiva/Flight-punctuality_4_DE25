@@ -25,18 +25,30 @@ models:
                 to: ref('dim_date')
                 field: date_key
 
-      # Foreign keys: must not contain null values.
-      - name: airline_id
+      # Natural keys: must not contain null values.
+      - name: airline_icao
         data_tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_airline')
+                field: airline_icao
 
-      - name: swedavia_airport_id
+      - name: swedavia_airport_iata
         data_tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_airport')
+                field: airport_iata
 
-      - name: other_airport_id
+      - name: other_airport_iata
         data_tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_airport')
+                field: airport_iata
 
       # Only arrivals (ARR) and departures (DEP) are allowed.
       - name: direction
