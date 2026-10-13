@@ -67,8 +67,10 @@ with source as (
     from {{ source('swedavia', 'departures') }}
 
     -- Exclude deleted flight records.
+    -- Exclude Swedavia test flights (SWD).
     -- Retain cancelled and other statuses for reporting.
     where location_and_status__flight_leg_status != 'DEL'
+        and airline_operator__icao != 'SWD'
 )
 
 
