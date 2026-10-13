@@ -1,5 +1,7 @@
--- One row per airline seen at a Swedavia airport.
--- Swedavia = the airline list, Wikipedia = just the country.
+-- dim_airline
+-- One row per airline that has flown at a Swedavia airport.
+-- Swedavia decides which airlines exist; Wikipedia only adds the country.
+-- Key: airline_icao (natural key, the fact table joins on it).
 
 with swedavia_airlines as (
     select airline_icao, airline_iata, airline_name from {{ ref('stg_swedavia__arrivals') }}
@@ -10,7 +12,7 @@ with swedavia_airlines as (
 airlines as (
     select
         airline_icao,
-        -- no IATA code? Swedavia sticks the ICAO there instead (BLX, JON...), so keep only 2-letter ones
+        -- Swedavia puts the ICAO code in the IATA field when there's no IATA code (BLX, JON...)
         max(case when length(airline_iata) = 2 then airline_iata end) as airline_iata,
         max(airline_name)                                              as airline_name
     from swedavia_airlines
@@ -19,11 +21,11 @@ airlines as (
 )
 
 select
-    {{ dbt_utils.generate_surrogate_key(['a.airline_icao']) }} as airline_id,  -- matches the fact table key
     a.airline_icao,
     a.airline_iata,
     a.airline_name,
-    coalesce(w.airline_country, 'Unknown')                     as airline_country
+    coalesce(w.airline_country, 'Unknown')    as airline_country
 from airlines as a
-left join {{ ref('stg_wikipedia__airlines') }} as w            -- left join so we don't lose airlines Wikipedia doesn't have
+-- left: no airline disappears if Wikipedia lacks it
+left join {{ ref('stg_wikipedia__airlines') }} as w
     on a.airline_icao = w.airline_icao
