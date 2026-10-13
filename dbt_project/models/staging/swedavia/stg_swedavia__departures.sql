@@ -83,6 +83,8 @@ select
     departure_date_utc,
     from_iata,
     to_iata,
+    from_icao,
+    to_icao,
 
     -- Airline information.
     airline_icao,
