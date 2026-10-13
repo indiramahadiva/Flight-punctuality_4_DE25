@@ -1,5 +1,5 @@
 
-# Tests that each staging model contains a unique, non-null movement identifier.
+# Validate ingestion identifiers and business-level movement uniqueness.
 version: 2
 
 models:
@@ -7,6 +7,16 @@ models:
     description: >
       Cleaned and standardized Swedavia arrival movements,
       excluding deleted flight records.
+
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - direction
+              - flight_id
+              - departure_date_utc
+              - from_iata
+              - to_iata
 
     columns:
       - name: raw_movement_key
@@ -19,6 +29,16 @@ models:
     description: >
       Cleaned and standardized Swedavia departure movements,
       excluding deleted flight records.
+
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - direction
+              - flight_id
+              - departure_date_utc
+              - from_iata
+              - to_iata
 
     columns:
       - name: raw_movement_key
