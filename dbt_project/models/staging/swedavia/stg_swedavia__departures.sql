@@ -42,6 +42,10 @@ with source as (
         flight_leg_identifier__departure_airport_iata as from_iata,
         flight_leg_identifier__arrival_airport_iata as to_iata,
 
+        -- ICAO airport codes for the flight route
+        flight_leg_identifier__departure_airport_icao as from_icao,
+        flight_leg_identifier__arrival_airport_icao as to_icao,
+
         -- Airline identifiers and descriptive information.
         airline_operator__icao as airline_icao,
         airline_operator__iata as airline_iata,

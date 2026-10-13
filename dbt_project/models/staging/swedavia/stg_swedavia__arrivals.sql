@@ -38,9 +38,13 @@ with source as (
         convert_timezone(
             'UTC', flight_leg_identifier__flight_departure_date_utc)::date as departure_date_utc,
 
-        -- IATA airport codes for the flight route.
+        -- IATA airport codes for the flight route
         flight_leg_identifier__departure_airport_iata as from_iata,
         flight_leg_identifier__arrival_airport_iata as to_iata,
+
+        -- ICAO airport codes for the flight route
+        flight_leg_identifier__departure_airport_icao as from_icao,
+        flight_leg_identifier__arrival_airport_icao as to_icao,
 
         -- Airline identifiers and descriptive information.
         airline_operator__icao as airline_icao,
@@ -86,6 +90,8 @@ select
     departure_date_utc,
     from_iata,
     to_iata,
+    from_icao,
+    to_icao,
 
     -- Airline information.
     airline_icao,
