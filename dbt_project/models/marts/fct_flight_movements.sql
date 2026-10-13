@@ -51,18 +51,10 @@ select
 
     date_key,
 
-    -- Generate keys to link the fact table to dimensions.
-    {{ dbt_utils.generate_surrogate_key([
-        'airline_icao'
-    ]) }} as airline_id,
-
-    {{ dbt_utils.generate_surrogate_key([
-        'swedavia_airport'
-    ]) }} as swedavia_airport_id,
-
-    {{ dbt_utils.generate_surrogate_key([
-        'other_airport_iata'
-    ]) }} as other_airport_id,
+    -- Use natural keys to link the fact table to dimensions.
+    airline_icao,
+    swedavia_airport as swedavia_airport_iata,
+    other_airport_iata,
 
     -- Flight details and delay information.
     direction,
