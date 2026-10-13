@@ -1,18 +1,22 @@
 # dbt_project/dbt_project.yml
-name: flight_punctuality          # the projects name, is used as a key under models:
+name: flight_punctuality # the projects name, is used as a key under models: and seeds:
 version: "1.0.0"
-profile: flight_punctuality       # Must match the name in profiles.yml EXACTLY
+profile: flight_punctuality # Must match the name in profiles.yml EXACTLY
 
 # models/, macros/, seeds/, tests/ is dbt's standard folders. No path needed.
-clean-targets:                    # What dbt clean is allowed to delete(clean)
+clean-targets: # What dbt clean is allowed to delete(clean)
   - target
   - dbt_packages
 
 models:
-  flight_punctuality:             # Same as name: above. If spelled wrong will produce a yellow warning
+  flight_punctuality: # Same as name: above. If spelled wrong will produce a yellow warning
     staging:
-      +schema: staging            # dev: dbt_<NAME>_staging, prod: staging (using the macro)
+      +schema: staging # dev: dbt_<NAME>_staging, prod: staging (using the macro)
       +materialized: view
     marts:
-      +schema: marts              # dev: dbt_<NAME>_marts, prod: marts
+      +schema: marts # dev: dbt_<NAME>_marts, prod: marts
       +materialized: table
+
+seeds:
+  flight_punctuality: # Same as name: above
+    +schema: staging # dev: dbt_<NAME>_staging, prod: staging. Without it, prod lands in dbt_prod

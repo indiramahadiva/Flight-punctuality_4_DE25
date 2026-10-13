@@ -1,0 +1,14 @@
+models:
+  - name: dim_airline
+    columns:
+      - name: airline_id
+        data_tests: [unique, not_null]
+      - name: airline_icao
+        data_tests: [unique, not_null]
+
+  - name: dim_airport
+    columns:
+      - name: airport_id
+        data_tests: [unique, not_null]
+      - name: airport_iata
+        data_tests: [unique, not_null]
