@@ -1,10 +1,13 @@
 [project]
 name = "flight-punctuality"
 version = "0.1.0"
-description = "Add your description here"
+description = "Grup project for Data Warehouse class examination"
 readme = "README.md"
 authors = [
-    { name = "Johnny Hyytiäinen", email = "Johnny.Hyytiainen@gmail.com" }
+    { name = "Aira Franco", email = "adelosofranco@gmail.com" },
+    { name = "Christoffer Carlsson", email = "christoffer.carlsson88@gmail.com" },
+    { name = "Johnny Hyytiäinen", email = "Johnny.Hyytiainen@gmail.com" },
+    { name = "Putu Indira Mahadiva Arysaputri", email = "indiramahadiva1@gmail.com" },
 ]
 
 # En applikation kör på exakt en Python-version
