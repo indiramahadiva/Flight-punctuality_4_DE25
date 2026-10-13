@@ -1,7 +1,7 @@
 [project]
 name = "flight-punctuality"
 version = "0.1.0"
-description = "Grup project for Data Warehouse class examination"
+description = "Group project for Data Warehouse class examination"
 readme = "README.md"
 authors = [
     { name = "Aira Franco", email = "adelosofranco@gmail.com" },
