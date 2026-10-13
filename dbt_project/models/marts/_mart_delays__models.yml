@@ -1,0 +1,23 @@
+models:
+  - name: mart_delays_daily
+    description: >
+      One row per date, Swedavia airport, airline and direction.
+      Read by the Streamlit dashboard.
+    data_tests:
+      # The grain: each combination may only appear once
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - date_key
+              - swedavia_airport_iata
+              - airline_icao
+              - direction
+    columns:
+      - name: date_key
+        data_tests: [not_null]
+      - name: swedavia_airport_iata
+        data_tests: [not_null]
+      - name: airline_icao
+        data_tests: [not_null]
+      - name: direction
+        data_tests: [not_null]
