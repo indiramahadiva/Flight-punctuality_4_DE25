@@ -25,6 +25,27 @@ models:
           - unique
           - not_null
 
+      - name: status
+        description: Swedavia flight leg status. Only LAN counts as a completed arrival
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['LAN', 'SCH', 'CAN']
+              config:
+                severity: warn  # unknown statuses = someone should look into it, not stop our pipeline
+
+      - name: delay_seconds
+        description: Actual minus scheduled time in seconds, negative value = early. NULL without an actual time.
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: -5400   # 90 min early: beyond that, likely a time zone error
+                max_value: 86400   # 24 h late: beyond that, likely a wrong date
+              config:
+                severity: error
+                warn_if: ">0"      # a few odd flights: warn
+                error_if: ">10"    # many: stop before the fact is built
+
   - name: stg_swedavia__departures
     description: >
       Cleaned and standardized Swedavia departure movements,
@@ -46,3 +67,25 @@ models:
         data_tests:
           - unique
           - not_null
+
+      - name: status
+        description: Swedavia flight leg status. Only ACT counts as a completed departure
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['ACT', 'SCH', 'SEQ', 'CAN', 'FLS']
+              config:
+                severity: warn
+
+      - name: delay_seconds
+        description: Actual minus scheduled time in seconds, negative value= early. NULL without an actual time.
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: -5400   # 90 min early: beyond that, likely a time zone error
+                max_value: 86400   # 24 h late: beyond that, likely a wrong date
+              config:
+                severity: error
+                warn_if: ">0"      # a few odd flights: warn
+                error_if: ">10"    # many: stop before the fact is built
+
