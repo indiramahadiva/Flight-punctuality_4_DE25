@@ -1,13 +1,14 @@
-// Faktan: en rad = en rörelse (arrivals eller departures) på en av Swedavia-flygplatserna
+// Faktan: en rad = en rörelse (ankomst eller avgång) på en av Swedavias tio flygplatser
+// Faktan joinar dimensionerna på naturliga koder, inga hashade id'n
 Table fct_flight_movements {
   movement_id varchar [pk, note: 'hash of direction, flight_id, departure_date_utc, from_iata, to_iata']
   date_key date [not null, note: 'Europe/Stockholm date of scheduled time']
-  airline_id varchar [not null]
+  airline_icao varchar [not null]
   swedavia_airport_id varchar [not null]
   other_airport_id varchar [not null]
   direction varchar [not null, note: 'ARR or DEP']
   flight_id varchar [not null] // flygnumret, ingen egen dimension
-  status varchar [not null] // LAN, ACT, CAN, SCH, DEL är borta redan i staging
+  status varchar [not null, note: 'ARR: LAN, SCH, CAN. DEP: ACT, SCH, SEQ, CAN, FLS. DEL removed in staging']
   scheduled_utc timestamp [not null]
   actual_utc timestamp // tom för inställda och ej genomförda flyg
   delay_seconds integer [note: 'actual minus scheduled, signed, negative = early, NULL without actual_utc']
@@ -19,26 +20,23 @@ Table dim_date {
 }
 // Byggs från Swedavias koder, Wikipedia läggs på med en LEFT JOIN
 Table dim_airline {
-  airline_id varchar [pk, note: 'hash of airline_icao']
-  airline_icao varchar [not null, note: 'natural key, joins Wikipedia']
-  airline_iata varchar [not null] // opålitlig - fem bolag har ICAO-koden här
+  airline_icao varchar [pk, note: 'natural key, the fact joins on it']
+  airline_iata varchar [note: 'only real 2 letter codes, NULL when Swedavia has none (BLX, JON..)']
   airline_name varchar [not null] // från Swedavia API, finns för alla
   airline_country varchar [not null, note: 'Wikipedia country_region, Unknown if no match exists']
 }
 
-// Byggs ifrån Swedavias KODER, Wikipedia läggs på med en LEFT JOIN
+// Byggs från Swedavias koder. Seeden - 23 svenska flygplatser och Wikipedia läggs på med LEFT JOIN
 Table dim_airport {
-  airport_id varchar [pk, note: 'hash of airport_iata']
-  airport_iata varchar [not null, note: 'natural key, joins the seed and Wikipedia']
-  airport_icao varchar [not null]
-  airport_name varchar [not null, note: 'seed, else Swedavia, else Wikipedia, else Unknown']
+  airport_iata varchar [pk, note: 'natural key, the fact joins on it']
+  airport_name varchar [not null, note: 'seed, else Wikipedia, else Unknown']
   city varchar [not null, note: 'seed, else Wikipedia location, else Unknown']
-  country varchar [not null, note: 'seed, else Wikipedia country, else Unknown']
-  is_swedavia boolean [not null, note: 'true for the ten airports in the seed']
+  country varchar [not null, note: 'Sweden for seed rows, else Wikipedia, else Unknown']
+  is_swedavia boolean [not null, note: 'true for the ten Swedavia airports in the seed']
 }
 
-// Flera(många) rörelser per dag, per bolag och per flygplats
+// Många rörelser per dag, per bolag och per flygplats
 Ref: fct_flight_movements.date_key > dim_date.date_key
-Ref: fct_flight_movements.airline_id > dim_airline.airline_id
-Ref: fct_flight_movements.swedavia_airport_id > dim_airport.airport_id
-Ref: fct_flight_movements.other_airport_id > dim_airport.airport_id
+Ref: fct_flight_movements.airline_icao > dim_airline.airline_icao
+Ref: fct_flight_movements.swedavia_airport_iata > dim_airport.airport_iata
+Ref: fct_flight_movements.other_airport_iata > dim_airport.airport_iata
