@@ -22,3 +22,26 @@ def loader_credentials() -> dict[str, str]:
         "password": os.environ["SNOWFLAKE_LOADER_PASSWORD"],
         "role": os.environ["SNOWFLAKE_LOADER_ROLE"],
     }
+
+
+def reporter_credentials() -> dict[str, str]:
+    """
+    Get Snowflake connection settings for the Streamlit dashboard.
+
+    The reporter role can only read the marts schema.
+
+    Returns:
+        A dictionary with keyword arguments for snowflake.connector.connect().
+    """
+
+    # Same idea as loader_credentials, but with the names the
+    # Snowflake connector expects (account, user) instead of dlt's (host, username).
+    return {
+        "account": os.environ["SNOWFLAKE_ACCOUNT"],
+        "user": os.environ["SNOWFLAKE_REPORTER_USER"],
+        "password": os.environ["SNOWFLAKE_REPORTER_PASSWORD"],
+        "role": os.environ["SNOWFLAKE_REPORTER_ROLE"],
+        "warehouse": os.environ["SNOWFLAKE_WAREHOUSE"],
+        "database": os.environ["SNOWFLAKE_DATABASE"],
+        "schema": "marts",
+    }
