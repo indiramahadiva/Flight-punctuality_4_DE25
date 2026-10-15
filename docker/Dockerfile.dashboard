@@ -1,0 +1,16 @@
+FROM python:3.12-slim
+
+ENV UV_NO_SYNC=1
+
+WORKDIR /app
+
+RUN pip install --no-cache-dir uv
+
+# The app imports flight_punctuality.connections, therefore the packages are needed 
+# But only for the dashboard dependency group
+COPY pyproject.toml uv.lock README.md ./
+COPY src/ ./src/
+RUN uv sync --frozen --no-default-groups --group dashboard
+
+EXPOSE 8501
+CMD ["uv", "run", "streamlit", "run", "src/flight_punctuality/dashboard/app.py", "--server.address=0.0.0.0", "--server.port=8501", "--server.headless=true"]

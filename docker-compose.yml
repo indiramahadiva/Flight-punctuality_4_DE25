@@ -1,0 +1,29 @@
+# Docker-compose file - NOTE: no register name in image: since file is shared by 4 people.
+# 4 people with their own separate Azure register. Name of register will be set up once each person during terraform step.
+services:
+  pipeline:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.pipeline
+    image: flight-pipeline
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+    # dagsters memory will persist even if container is removed
+      - dagster_home:/app/dagster_home
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dashboard
+    image: flight-dashboard
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+
+# Named volume, docker owns it and not disk
+volumes:
+  dagster_home:

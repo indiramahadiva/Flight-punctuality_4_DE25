@@ -1,0 +1,26 @@
+FROM python:3.12-slim
+
+# uv run should not re-sync environment at start
+ENV UV_NO_SYNC=1 \
+    DAGSTER_HOME=/app/dagster_home
+
+# Repo root = working directory, so that [tool.dagster] in pyproject.toml can be found
+WORKDIR /app
+
+RUN pip install --no-cache-dir uv
+
+# The package is located under src/ and pyproject.toml points to README.md, both must exist before sync
+COPY pyproject.toml uv.lock README.md ./
+COPY src/ ./src/
+RUN uv sync --frozen --no-default-groups --group ingestion --group transform --group orchestration
+
+
+# The dbt project, with profiles.yml alongside it. deps fetches dbt_utils, ensuring that a clean clone works.
+COPY dbt_project/ ./dbt_project/
+RUN uv run dbt deps --project-dir dbt_project
+
+# Dagsters memory: Run history and the schemas schedule state
+RUN mkdir -p $DAGSTER_HOME
+
+EXPOSE 3000
+CMD ["uv", "run", "dagster", "dev", "-h", "0.0.0.0", "-p", "3000"]

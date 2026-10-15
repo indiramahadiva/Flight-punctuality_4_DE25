@@ -1,0 +1,24 @@
+# Local environments + secrets 
+.venv/
+.env
+.git/
+
+# Cache from python and tooling
+**/__pycache__/
+**/.pytest_cache/
+**/.ruff_cache/
+
+# dbt generated files - deps runs in build, manifest is created from start.
+dbt_project/target/
+dbt_project/logs/
+dbt_project/dbt_packages/
+dbt_project/.user.yml
+
+# Local runs and stuff that the pipeline doesnt read
+.tmp_dagster_home_*/
+logs/
+data/
+notebooks/
+scratch/
+docs/
+tests/
