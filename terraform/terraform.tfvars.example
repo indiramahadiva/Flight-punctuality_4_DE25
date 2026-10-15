@@ -1,0 +1,43 @@
+# terraform.tfvars.example
+# Copy to terraform.tfvars (ignored by git) and fill in your own values:
+#   cp terraform.tfvars.example terraform.tfvars
+
+# ===== PERSONAL - the only lines that differ between us =====
+
+subscription_id = "" # az account show --query id -o tsv
+suffix          = "" # your initials, lowercase, e.g. "jh"
+pipeline_cron   = "" # your time from the table below
+
+# Schedule in Swedish time, one hour apart:
+#   Johnny       "0 18 * * *"
+#   Indira       "0 19 * * *"
+#   Aira         "0 20 * * *"
+#   Christoffer  "0 21 * * *"
+
+# ===== SHARED - the same for all four, copy the values from your .env =====
+
+app_env = {
+  SWEDAVIA_API_KEY = ""
+
+  SNOWFLAKE_ACCOUNT   = ""
+  SNOWFLAKE_DATABASE  = ""
+  SNOWFLAKE_WAREHOUSE = ""
+
+  SNOWFLAKE_LOADER_USER     = ""
+  SNOWFLAKE_LOADER_PASSWORD = ""
+  SNOWFLAKE_LOADER_ROLE     = ""
+
+  SNOWFLAKE_TRANSFORMER_USER     = ""
+  SNOWFLAKE_TRANSFORMER_PASSWORD = ""
+  SNOWFLAKE_TRANSFORMER_ROLE     = ""
+
+  SNOWFLAKE_REPORTER_USER     = ""
+  SNOWFLAKE_REPORTER_PASSWORD = ""
+  SNOWFLAKE_REPORTER_ROLE     = ""
+}
+
+# ===== OPTIONAL - uncomment to override a default =====
+
+# location          = "swedencentral"
+# image_tag         = "v2"   # bump after a code change
+# dagster_ui_public = false  # after the demo
