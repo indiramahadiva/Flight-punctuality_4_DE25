@@ -288,3 +288,12 @@ scratch/*
 Thumbs.db
 desktop.ini
 *.swp
+
+# --- 9: Terraform and IaC ---
+# state and tfvars hold secrets in plain text, .terraform/ is the downloaded provider
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+tfplan
+crash.log
