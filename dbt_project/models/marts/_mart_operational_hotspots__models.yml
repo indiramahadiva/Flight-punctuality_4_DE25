@@ -1,0 +1,32 @@
+models:
+  - name: mart_operational_hotspots
+    description: >
+      One row per date, Swedavia airport, scheduled hour (Swedish time) and direction.
+      Read by the Operational Delay Impact & Hotspots page.
+    data_tests:
+      # The grain: each combination may only appear once
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - date_key
+              - swedavia_airport_iata
+              - scheduled_hour
+              - direction
+      # The three severity bands must add up to all delayed flights
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "delayed_15_30 + delayed_30_60 + delayed_60_plus = delayed"
+    columns:
+      - name: date_key
+        data_tests: [not_null]
+      - name: swedavia_airport_iata
+        data_tests: [not_null]
+      - name: direction
+        data_tests: [not_null]
+      - name: scheduled_hour
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 23
