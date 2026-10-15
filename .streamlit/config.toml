@@ -1,0 +1,8 @@
+# Group colour palette, light theme
+# https://www.figma.com/color-palette-generator/?colors=AAABB0-A0BFDC-DFE0E2-263C49-10120D
+[theme]
+base = "light"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#DFE0E2"
+textColor = "#10120D"
+primaryColor = "#263C49"
