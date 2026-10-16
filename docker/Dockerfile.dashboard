@@ -12,5 +12,8 @@ COPY pyproject.toml uv.lock README.md ./
 COPY src/ ./src/
 RUN uv sync --frozen --no-default-groups --group dashboard
 
+# Theme with the group colour palette. After uv sync, so a colour change does not reinstall packages
+COPY .streamlit/ ./.streamlit/
+
 EXPOSE 8501
 CMD ["uv", "run", "streamlit", "run", "src/flight_punctuality/dashboard/app.py", "--server.address=0.0.0.0", "--server.port=8501", "--server.headless=true"]
