@@ -6,6 +6,8 @@
 ![Dagster](https://img.shields.io/badge/Dagster-orchestration-4F43DD)
 ![Streamlit](https://img.shields.io/badge/Streamlit-dashboard-FF4B4B)
 ![Docker](https://img.shields.io/badge/Docker-containers-2496ED)
+![Terraform](https://img.shields.io/badge/Terraform-IaC-7B42BC)
+![Azure](https://img.shields.io/badge/Azure-deployment-0078D4)
 
 A modern data stack that measures flight punctuality at Sweden's ten Swedavia airports.
 Arrivals and departures are loaded from the Swedavia FlightInfo API, modelled in Snowflake,
@@ -43,8 +45,19 @@ All three layers are schemas in one Snowflake database, `flights_db`. Each step 
 | Serve | Streamlit | reads `marts` only | `flights_reporter` | 
 | Orchestrate | Dagster | runs loads and transforms as one job | - | 
 
-The daily schedule is off by default and only switches on where `PIPELINE_CRON` is set.
-Locally and in Docker, runs are started by hand in the Dagster UI.
+The daily schedule is off by default and only switches on where `PIPELINE_CRON` is set:
+
+| Where | `PIPELINE_CRON` | Schedule |
+|---|---|---|
+| Local - `uv run dagster dev` | not set | Stopped, runs are started by hand |
+| Docker Compose | not set | Stopped, runs are started by hand |
+| Azure - Johnny | `0 18 * * *` | Running, 18:00 Swedish time |
+| Azure - Indira | `0 19 * * *` | Running, 19:00 |
+| Azure - Aira | `0 20 * * *` | Running, 20:00 |
+| Azure - Christoffer | `0 21 * * *` | Running, 21:00 |
+
+Each Azure deploy sets its own time in `terraform/terraform.tfvars`. One hour apart, so two
+runs never share dlt's temporary tables.
 
 
 ## Delay definition
@@ -84,12 +97,14 @@ uv run --env-file .env streamlit run src/flight_punctuality/dashboard/app.py
 ```
 
 With `.env` filled in, both can also run as containers: `docker compose up --build`.
+To deploy both to your own Azure account: [Deploy to Azure](docs/deploy_to_azure.md).
 
 ## Documentation
 
 - [Commands](docs/commands.md) - Every command, dev and prod
 - [Run locally](docs/run_locally.md) - full setup, from Snowflake to dashboard
 - [Run with Docker](docs/run_with_docker.md) - both containers with Docker Compose
+- [Deploy to Azure](docs/deploy_to_azure.md) - one `terraform apply` per person
 - [EDA findings](docs/eda_findings.md) - what the Swedavia data looks like
 - [Data model](docs/ERD_dimensional_model.png) - the dimensional model ([dbdiagram source](docs/ERD_dimensional.dbml))
 
@@ -104,6 +119,7 @@ Flight-punctuality_4_DE25/
 ├─ dbt_project/        staging and marts models, tests, seed
 ├─ snowflake_setup/    SQL for warehouse, database, roles and grants
 ├─ docker/             Dockerfiles for the pipeline and the dashboard
+├─ terraform/          Azure deployment: registry, Container App, Web App
 ├─ docs/               guides, EDA findings, ERD
 ├─ notebooks/          EDA of the Swedavia data
 ├─ tests/              pytest for the dlt source
