@@ -87,7 +87,7 @@ Dagster loads the raw data with dlt, then builds and tests the dbt models. Wait 
 In a second terminal, once every asset is green - before that the marts do not exist:
 
 ```bash
-uv run --env-file .env streamlit run src/flight_punctuality/dashboard/app.py
+uv run --env-file .env streamlit run src/flight_punctuality/dashboard/main.py
 ```
 
 Open http://localhost:8501.

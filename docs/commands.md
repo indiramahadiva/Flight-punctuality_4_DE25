@@ -68,5 +68,5 @@ cd ..
 Reads `marts`, so it shows what the last prod run built. Dev runs never show up there.
 
 ```bash
-uv run --env-file .env streamlit run src/flight_punctuality/dashboard/app.py
+uv run --env-file .env streamlit run src/flight_punctuality/dashboard/main.py
 ```

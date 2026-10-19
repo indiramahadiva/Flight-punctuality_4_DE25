@@ -93,7 +93,7 @@ uv run dbt deps --project-dir dbt_project   # installs dbt packages
 uv run dagster dev
 
 # Terminal 2 - dashboard -> http://localhost:8501
-uv run --env-file .env streamlit run src/flight_punctuality/dashboard/app.py
+uv run --env-file .env streamlit run src/flight_punctuality/dashboard/main.py
 ```
 
 > **Materialize all** builds into the shared `staging` and `marts` schemas.
