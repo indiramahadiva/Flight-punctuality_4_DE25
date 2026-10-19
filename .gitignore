@@ -221,11 +221,11 @@ __marimo__/
 
 
 # =============================================================
-# Labbrepot: dlt + dbt + Snowflake + Dagster + Streamlit
-# Princip: ignorera hemligheter och mappar, inte filändelser rakt av
+# Lab repo: dlt + dbt + Snowflake + Dagster + Streamlit
+# Principle: ignore secrets and folders, not whole file types
 # =============================================================
 
-# --- 1. Hemligheter (läcker de är nyckeln bränd) ---
+# --- 1. Secrets (a leaked key is a burned key) ---
 .env
 .env.*
 !.env.example
@@ -235,9 +235,9 @@ secrets.toml
 *.key
 rsa_key*
 setup_user*
-# OBS: dbt_project/profiles.yml checkas IN. Den innehåller bara env_var()
+# Note: dbt_project/profiles.yml is committed. It only holds env_var() calls
 
-# --- 2. Python och uv ---
+# --- 2. Python and uv ---
 .venv/
 __pycache__/
 *.py[cod]
@@ -263,7 +263,7 @@ logs/
 # --- 5. Dagster ---
 .tmp_dagster_home_*/
 
-# --- 6. Data (ALDRIG i git) ---
+# --- 6. Data (Never in git) ---
 data/*
 !data/README.md
 !data/.gitkeep
@@ -279,7 +279,7 @@ data/*
 scratch/*
 !scratch/.gitkeep
 
-# --- 8. Editor och OS ---
+# --- 8. Editor and OS ---
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
@@ -289,8 +289,8 @@ Thumbs.db
 desktop.ini
 *.swp
 
-# --- 9: Terraform and IaC ---
-# state and tfvars hold secrets in plain text, .terraform/ is the downloaded provider
+# --- 9. Terraform and IaC ---
+# State and tfvars hold secrets in plain text. .terraform/ is the downloaded provider
 .terraform/
 *.tfstate
 *.tfstate.*

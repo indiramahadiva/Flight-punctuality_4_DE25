@@ -1,13 +1,13 @@
 # dbt_project/models/staging/swedavia/_swedavia__sources.yml
 sources:
-  - name: swedavia # första argumentet i source()
+  - name: swedavia # first argument of source()
     schema: swedavia_raw # DLTs dataset_name
     tables:
-      - name: arrivals # andra argumentet i source()
+      - name: arrivals # second argument of source()
         config:
           meta:
             dagster:
-              asset_key: ["dlt_swedavia_arrivals"] # Same name as in the dlt-asset in Dagster
+              asset_key: ["dlt_swedavia_arrivals"] # Same name as in the dlt asset in Dagster
       - name: departures
         config:
           meta:
