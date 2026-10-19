@@ -1,6 +1,6 @@
 -- 05: One user per tool, each with its own role. Run as USERADMIN, then SECURITYADMIN.
--- Replace the three password placeholders in your Snowflake worksheet, never in this file.
--- Use the same passwords in .env.
+-- Never fill in the passwords here. Copy this file to setup_users.sql (git ignores setup_user*),
+-- replace the three placeholders in the copy and run it. Use the same passwords in .env.
 -- In an account that already has these users, this resets their passwords.
 USE ROLE USERADMIN;
 
