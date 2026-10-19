@@ -5,7 +5,7 @@ From a fresh clone to a running pipeline and dashboard on your own machine.
 ## Prerequisites
 
 - [uv](https://docs.astral.sh/uv/) - installs Python 3.12 for you
-- A Snowflake account where you can use `SYSADMIN`, `USERADMIN` and `SECURITYADMIN` (a trial account works)
+- A Snowflake **trial** account where you can use `SYSADMIN`, `USERADMIN` and `SECURITYADMIN` 
 - A Swedavia API key from [apideveloper.swedavia.se](https://apideveloper.swedavia.se/)
 
 
@@ -37,7 +37,7 @@ Never save the passwords in the file. The same passwords go into `.env` in step 
 cp .env.example .env
 ```
 
-Fill in the API key, your Snowflake account (`orgname-accountname`) and the three passwords.
+Fill in the API key, your Snowflake account (`orgname-accountname`) and the three passwords from step 1.
 Set `DBT_SCHEMA` to `dbt_<yourname>`: your own schemas when you run dbt by hand.
 `PIPELINE_CRON` is left out on purpose. Without it, the schedule stays stopped.
 
