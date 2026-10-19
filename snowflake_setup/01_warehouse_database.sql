@@ -1,4 +1,4 @@
--- 01: Warehouse och databas. Körs som SYSADMIN (byggaren).
+-- 01: Warehouse and database. Run as SYSADMIN (the builder).
 USE ROLE SYSADMIN;
 
 CREATE WAREHOUSE IF NOT EXISTS flights_wh

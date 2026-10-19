@@ -1,5 +1,5 @@
--- 06: Prove the setup, one role at a time, then the users. NO borrowed roles.
--- Run all stops with an error if a role cannot use the warehouse OR the database.
+-- 06: Prove the setup, one role at a time, then the users. No borrowed roles.
+-- Run all stops with an error if a role cannot use the warehouse or the database.
 -- Select one block and press Ctrl+Enter to read its results.
 
 -- Streamlit: Should see marts and nothing else.
@@ -10,7 +10,7 @@ USE WAREHOUSE flights_wh;
 SHOW SCHEMAS IN DATABASE flights_db;
 SHOW GRANTS TO ROLE flights_reporter;
 
--- dbt: SHould see the RAW data (read) plus staging and marts (own)
+-- dbt: Should see the RAW data (read) plus staging and marts (own)
 USE ROLE flights_transformer;
 USE SECONDARY ROLES NONE;
 USE WAREHOUSE flights_wh;

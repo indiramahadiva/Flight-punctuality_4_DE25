@@ -1,11 +1,11 @@
--- 02: Roller, en per verktyg. Körs som USERADMIN (receptionen).
+-- 02: Roles, one per tool. Run as USERADMIN (the front desk).
 USE ROLE USERADMIN;
 
 CREATE ROLE IF NOT EXISTS flights_loader;      -- dlt
 CREATE ROLE IF NOT EXISTS flights_transformer; -- dbt
 CREATE ROLE IF NOT EXISTS flights_reporter;    -- Streamlit
 
--- Rollerna under SYSADMIN, så att byggaren kan förvalta det de skapar
+-- The roles go under SYSADMIN, so the builder can manage what they create
 GRANT ROLE flights_loader      TO ROLE SYSADMIN;
 GRANT ROLE flights_transformer TO ROLE SYSADMIN;
 GRANT ROLE flights_reporter    TO ROLE SYSADMIN;
