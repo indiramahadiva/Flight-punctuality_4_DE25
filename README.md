@@ -79,8 +79,8 @@ The rules are applied in dbt and are the same for arrivals and departures:
 
 ## Quickstart
 
-Requires [uv](https://docs.astral.sh/uv/), a Snowflake account set up with `snowflake_setup/`
-and a [Swedavia API key](https://apideveloper.swedavia.se/).
+Requires [uv](https://docs.astral.sh/uv/), a Snowflake trial account set up with `snowflake_setup/`
+([Run locally](docs/run_locally.md), step 1) and a [Swedavia API key](https://apideveloper.swedavia.se/).
 
 ```bash
 git clone https://github.com/indiramahadiva/Flight-punctuality_4_DE25.git
@@ -95,6 +95,9 @@ uv run dagster dev
 # Terminal 2 - dashboard -> http://localhost:8501
 uv run --env-file .env streamlit run src/flight_punctuality/dashboard/app.py
 ```
+
+> **Materialize all** builds into the shared `staging` and `marts` schemas.
+> In a shared Snowflake account, tell the group before you run it.
 
 With `.env` filled in, both can also run as containers: `docker compose up --build`.
 To deploy both to your own Azure account: [Deploy to Azure](docs/deploy_to_azure.md).

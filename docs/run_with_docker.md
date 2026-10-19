@@ -20,7 +20,7 @@ The first build takes a few minutes. Both containers read `.env` through `env_fi
 
 ## 2. Run the pipeline
 
-Open http://localhost:3000, go to **Assets** and click **Materialize all**.
+Open http://localhost:3000, go to **Lineage** and click **Materialize all** in the top right corner.
 As when running locally, this writes to the shared `staging` and `marts` schemas.
 The schedule shows *Stopped*: `PIPELINE_CRON` is not set, so nothing runs on its own.
 

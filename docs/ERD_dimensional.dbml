@@ -1,16 +1,16 @@
-// Faktan: en rad = en rörelse (ankomst eller avgång) på en av Swedavias tio flygplatser
-// Faktan joinar dimensionerna på naturliga koder, inga hashade id'n
+// The fact: one row = one movement (arrival or departure) at one of Swedavia's ten airports
+// The fact joins the dimensions on natural codes, no hashed ids
 Table fct_flight_movements {
   movement_id varchar [pk, note: 'hash of direction, flight_id, departure_date_utc, from_iata, to_iata']
   date_key date [not null, note: 'Europe/Stockholm date of scheduled time']
   airline_icao varchar [not null]
-  swedavia_airport_id varchar [not null]
-  other_airport_id varchar [not null]
+  swedavia_airport_iata varchar [not null]
+  other_airport_iata varchar [not null]
   direction varchar [not null, note: 'ARR or DEP']
-  flight_id varchar [not null] // flygnumret, ingen egen dimension
+  flight_id varchar [not null] // the flight number, no dimension of its own
   status varchar [not null, note: 'ARR: LAN, SCH, CAN. DEP: ACT, SCH, SEQ, CAN, FLS. DEL removed in staging']
   scheduled_utc timestamp [not null]
-  actual_utc timestamp // tom för inställda och ej genomförda flyg
+  actual_utc timestamp // empty for cancelled flights and flights not yet flown
   delay_seconds integer [note: 'actual minus scheduled, signed, negative = early, NULL without actual_utc']
 }
 
@@ -18,15 +18,15 @@ Table dim_date {
   date_key date [pk]
   weekday varchar [not null]
 }
-// Byggs från Swedavias koder, Wikipedia läggs på med en LEFT JOIN
+// Built from Swedavia's codes, Wikipedia added with a LEFT JOIN
 Table dim_airline {
   airline_icao varchar [pk, note: 'natural key, the fact joins on it']
   airline_iata varchar [note: 'only real 2 letter codes, NULL when Swedavia has none (BLX, JON..)']
-  airline_name varchar [not null] // från Swedavia API, finns för alla
+  airline_name varchar [not null] // from the Swedavia API, present for every airline
   airline_country varchar [not null, note: 'Wikipedia country_region, Unknown if no match exists']
 }
 
-// Byggs från Swedavias koder. Seeden - 23 svenska flygplatser och Wikipedia läggs på med LEFT JOIN
+// Built from Swedavia's codes. The seed (23 Swedish airports) and Wikipedia are added with a LEFT JOIN
 Table dim_airport {
   airport_iata varchar [pk, note: 'natural key, the fact joins on it']
   airport_name varchar [not null, note: 'seed, else Wikipedia, else Unknown']
@@ -35,7 +35,7 @@ Table dim_airport {
   is_swedavia boolean [not null, note: 'true for the ten Swedavia airports in the seed']
 }
 
-// Många rörelser per dag, per bolag och per flygplats
+// Many movements per day, per airline and per airport
 Ref: fct_flight_movements.date_key > dim_date.date_key
 Ref: fct_flight_movements.airline_icao > dim_airline.airline_icao
 Ref: fct_flight_movements.swedavia_airport_iata > dim_airport.airport_iata

@@ -10,7 +10,7 @@ authors = [
     { name = "Putu Indira Mahadiva Arysaputri", email = "indiramahadiva1@gmail.com" },
 ]
 
-# En applikation kör på exakt en Python-version
+# An application runs on exactly one Python version
 requires-python = "==3.12.*"
 dependencies = []
 
@@ -19,7 +19,7 @@ dependencies = []
 requires = ["uv_build>=0.12.6,<0.13.0"]
 build-backend = "uv_build"
 
-# Lokalt installerar uv sync alla grupper
+# Locally, uv sync installs every group
 [tool.uv]
 default-groups = "all"
 
