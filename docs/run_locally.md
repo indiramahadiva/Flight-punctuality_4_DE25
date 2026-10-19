@@ -8,9 +8,14 @@ From a fresh clone to a running pipeline and dashboard on your own machine.
 - A Snowflake account where you can use `SYSADMIN`, `USERADMIN` and `SECURITYADMIN` (a trial account works)
 - A Swedavia API key from [apideveloper.swedavia.se](https://apideveloper.swedavia.se/)
 
+
+> **Trial accounts only.** The three users sign in with a password. Snowflake is phasing out
+> password-only sign-in, and trial accounts are exempt. A paid account needs key-pair
+> authentication instead, which this project does not set up.
+
 ## 1. Set up Snowflake
 
-Run the scripts in `snowflake_setup/` in order, in a Snowflake worksheet.
+Run the scripts in `snowflake_setup/` in order, one worksheet each, with **Run all**.
 Each script switches to the role it needs.
 
 | Script | Creates |
@@ -19,21 +24,12 @@ Each script switches to the role it needs.
 | `02_roles.sql` | one role per tool: loader, transformer, reporter |
 | `03_schemas.sql` | `swedavia_raw`, `wikipedia_raw`, `staging`, `marts`, each owned by its role |
 | `04_grants.sql` | the rights each role needs, and nothing more |
-| `05_verify_grants.sql` | nothing - checks the grants, one role at a time |
+| `05_users.sql` | one user per role: `dlt_user`, `dbt_user`, `streamlit_user` |
+| `06_verify_grants.sql` | nothing - checks the roles and the users |
 
-Then create one user per role:
+Before you run `05_users.sql`, replace its three password placeholders in the worksheet.
+Never save the passwords in the file. The same passwords go into `.env` in step 2.
 
-```sql
-USE ROLE USERADMIN;
-CREATE USER IF NOT EXISTS dlt_user       PASSWORD = '<password>' DEFAULT_ROLE = flights_loader      DEFAULT_WAREHOUSE = flights_wh;
-CREATE USER IF NOT EXISTS dbt_user       PASSWORD = '<password>' DEFAULT_ROLE = flights_transformer DEFAULT_WAREHOUSE = flights_wh;
-CREATE USER IF NOT EXISTS streamlit_user PASSWORD = '<password>' DEFAULT_ROLE = flights_reporter    DEFAULT_WAREHOUSE = flights_wh;
-
-USE ROLE SECURITYADMIN;
-GRANT ROLE flights_loader      TO USER dlt_user;
-GRANT ROLE flights_transformer TO USER dbt_user;
-GRANT ROLE flights_reporter    TO USER streamlit_user;
-```
 
 ## 2. Fill in .env
 
