@@ -1,0 +1,55 @@
+
+models:
+  - name: mart_airline_hotspots
+    description: >
+      Flight movement and delay metrics grouped by date,
+      airport, airline, scheduled hour, and direction.
+
+    data_tests:
+      # Each combination should appear only once.
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - date_key
+              - swedavia_airport_iata
+              - airline_icao
+              - scheduled_hour
+              - direction
+
+      # Delayed movements cannot exceed completed movements.
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "delayed <= completed"
+
+      # Completed and cancelled movements are separate.
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "completed + cancelled <= movements"
+
+    columns:
+      - name: date_key
+        data_tests:
+          - not_null
+
+      - name: swedavia_airport_iata
+        data_tests:
+          - not_null
+
+      - name: airline_name
+        data_tests:
+          - not_null
+
+      - name: direction
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['ARR', 'DEP']
+
+      - name: scheduled_hour
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 23
