@@ -27,8 +27,13 @@ Each script switches to the role it needs.
 | `05_users.sql` | one user per role: `dlt_user`, `dbt_user`, `streamlit_user` |
 | `06_verify_grants.sql` | nothing - checks the roles and the users |
 
-Before you run `05_users.sql`, replace its three password placeholders in the worksheet.
-Never save the passwords in the file. The same passwords go into `.env` in step 2.
+```
+Before you run `05_users.sql`, choose three passwords - you make them up, nothing to look up. At least 8 characters with an uppercase letter, a lowercase letter and a digit. 
+
+Stick to letters and digits: quotes break the SQL and the dbt profile.
+Write them into `.env` first (step 2), then paste them over the placeholders in the worksheet.
+Never save the passwords in the file.
+```
 
 
 ## 2. Fill in .env
