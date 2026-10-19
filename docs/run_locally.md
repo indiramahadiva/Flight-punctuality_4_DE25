@@ -76,8 +76,8 @@ From the repo root, so Dagster picks up `.env`:
 uv run dagster dev
 ```
 
-Open http://localhost:3000, go to **Assets** and click **Materialize all**.
-Dagster loads the raw data with dlt, then builds and tests the dbt models.
+Open http://localhost:3000, go to **Lineage** and click **Materialize all** in the top right corner.
+Dagster loads the raw data with dlt, then builds and tests the dbt models. Wait until every asset is green.
 
 > Dagster always builds into the shared `staging` and `marts` schemas.
 > In a shared Snowflake account, tell the group before you run it.
