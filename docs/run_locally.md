@@ -29,7 +29,7 @@ Each script switches to the role it needs.
 ### Passwords for 05_users.sql
 
 You make up the three passwords - there is nothing to look up.
-At least 8 characters, with an uppercase letter, a lowercase letter and a digit.
+At least 16 characters, with an uppercase letter, a lowercase letter and a digit. 
 Use only letters and digits: quotes break the SQL and the dbt profile.
 
 Write them in a copy, never in `05_users.sql`. Git ignores every file that starts with `setup_user`:
@@ -84,7 +84,7 @@ Dagster loads the raw data with dlt, then builds and tests the dbt models. Wait 
 
 ## 5. Open the dashboard
 
-In a second terminal:
+In a second terminal, once every asset is green - before that the marts do not exist:
 
 ```bash
 uv run --env-file .env streamlit run src/flight_punctuality/dashboard/app.py
