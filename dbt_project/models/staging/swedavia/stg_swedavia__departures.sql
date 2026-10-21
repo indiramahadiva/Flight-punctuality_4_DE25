@@ -129,3 +129,10 @@ select
     _dlt_id
 
 from source
+
+-- A retimed flight gets a new ingestion key, so the old version stays in raw.
+-- Keep only the latest loaded version of each flight leg.
+qualify row_number() over (
+    partition by flight_id, departure_date_utc, from_iata, to_iata
+    order by _dlt_load_id desc, scheduled_utc desc
+) = 1
