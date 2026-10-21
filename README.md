@@ -71,6 +71,7 @@ The rules are applied in dbt and are the same for arrivals and departures:
 | Completed | Status `LAN` (landed) for arrivals, `ACT` (departed) for departures |
 | Cancelled | Status `CAN`. Counted on its own, never as delayed |
 | Removed | Status `DEL`. Filtered out in staging |
+| Test flights | Airline code `SWD`, Swedavia's own test flights. Filtered out in staging |
 | Delayed share | Delayed ÷ completed |
 | Date | The scheduled date in Swedish time |
 | Airports | Swedavia's ten airports, the only ones the API covers |
