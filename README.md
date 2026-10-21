@@ -71,6 +71,7 @@ The rules are applied in dbt and are the same for arrivals and departures:
 | Completed | Status `LAN` (landed) for arrivals, `ACT` (departed) for departures |
 | Cancelled | Status `CAN`. Counted on its own, never as delayed |
 | Removed | Status `DEL`. Filtered out in staging |
+| Test flights | Airline code `SWD`, Swedavia's own test flights. Filtered out in staging |
 | Delayed share | Delayed ÷ completed |
 | Date | The scheduled date in Swedish time |
 | Airports | Swedavia's ten airports, the only ones the API covers |
@@ -110,6 +111,7 @@ To deploy both to your own Azure account: [Deploy to Azure](docs/deploy_to_azure
 - [Deploy to Azure](docs/deploy_to_azure.md) - one `terraform apply` per person
 - [EDA findings](docs/eda_findings.md) - what the Swedavia data looks like
 - [Data model](docs/ERD_dimensional_model.png) - the dimensional model ([dbdiagram source](docs/ERD_dimensional.dbml))
+- [Architecture map](docs/architecture_map.png) - every component, file and secret on one page
 
 ## Project structure
 
@@ -123,9 +125,9 @@ Flight-punctuality_4_DE25/
 ├─ snowflake_setup/    SQL for warehouse, database, roles and grants
 ├─ docker/             Dockerfiles for the pipeline and the dashboard
 ├─ terraform/          Azure deployment: registry, Container App, Web App
-├─ docs/               guides, EDA findings, ERD
+├─ docs/               guides, EDA findings, ERD, architecture map
 ├─ notebooks/          EDA of the Swedavia data
-├─ tests/              pytest for the dlt source
+├─ tests/              pytest for the dlt source and the dashboard
 ├─ sql/                ad hoc validation queries
 ├─ docker-compose.yml  runs both containers
 └─ pyproject.toml      dependencies, grouped per container
