@@ -38,7 +38,7 @@ cd ..
 Python checks:
 
 ```bash
-uv run pytest        # tests for the dlt source
+uv run pytest        # unit tests: dlt source and dashboard
 uv run ruff check .  # lint
 ```
 

@@ -125,7 +125,7 @@ Flight-punctuality_4_DE25/
 ├─ terraform/          Azure deployment: registry, Container App, Web App
 ├─ docs/               guides, EDA findings, ERD
 ├─ notebooks/          EDA of the Swedavia data
-├─ tests/              pytest for the dlt source
+├─ tests/              pytest for the dlt source and the dashboard
 ├─ sql/                ad hoc validation queries
 ├─ docker-compose.yml  runs both containers
 └─ pyproject.toml      dependencies, grouped per container
